@@ -1,58 +1,26 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useAccount } from "wagmi"
+import useComplianceCheck from "@/hooks/useComplianceCheck"
 import RecentlyListedNFTs from "@/components/RecentlyListed"
-
-const appUrl = process.env.NEXT_PUBLIC_APP_URL
-
-console.log("App url: ", appUrl) // Log the app URL for debugging;
+import { useAccount } from "wagmi"
+import { FiLoader } from "react-icons/fi"
 
 export default function Home() {
-    const { isConnected, address } = useAccount() // Get connection status and address
-    const [isCompliant, setIsCompliant] = useState(true) // Default to true, adjust if needed
+    const { isConnected } = useAccount()
+    const { isCompliant, isLoading, error } = useComplianceCheck()
 
-    // Define the async function to perform the check
-    async function checkCompliance() {
-        if (!address) return // Don't run if no address is connected
-
-        try {
-            const response = await fetch(`${appUrl}/api/compliance`, {
-                // Call internal backend API
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ address }), // Send the address
-            })
-
-            if (!response.ok) {
-                // Handle API errors (e.g., backend down)
-                console.error("Compliance API request failed:", response.statusText)
-                setIsCompliant(false) // Assume non-compliant on error
-                return
-            }
-
-            const result = await response.json()
-            // Update state based on the backend's response structure
-            // Assuming the API returns { success: boolean, isApproved: boolean }
-            setIsCompliant(result.success && result.isApproved)
-        } catch (error) {
-            console.error("Error calling compliance API:", error)
-            setIsCompliant(false) // Assume non-compliant on fetch error
-        }
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center p-4 md:p-6 xl:p-8">
+                <FiLoader className="animate-spin text-2xl" />
+                <span className="ml-2">Loading...</span>
+            </div>
+        )
     }
 
-    // Use useEffect to trigger the check when the address changes
-    useEffect(() => {
-        if (isConnected && address) {
-            // Address is available, perform the check
-            checkCompliance()
-        } else {
-            // Optional: Reset compliance status if disconnected
-            setIsCompliant(true) // Or false, depending on desired default state
-        }
-    }, [address, isConnected]) // Dependencies: run when address or connection status changes
+    if (error) {
+        return <div>Error: {error}</div>
+    }
 
     return (
         <main>
@@ -65,7 +33,6 @@ export default function Home() {
                     <RecentlyListedNFTs />
                 </div>
             ) : (
-                // Not Compliant: Show a denial message
                 <div className="p-8 bg-white rounded-xl shadow-sm border border-zinc-200 text-center">
                     <p className="text-red-600 font-medium">
                         Your address has been blocked due to compliance restrictions.

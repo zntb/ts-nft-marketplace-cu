@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import NFTBox from "./NFTBox"
 import Link from "next/link"
+import { FiLoader } from "react-icons/fi"
 
 // Define types for your GraphQL response
 interface NFTItem {
@@ -148,7 +149,13 @@ function useRecentlyListedNFTs() {
 export default function RecentlyListedNFTs() {
     const { isLoading, error, nftDataList } = useRecentlyListedNFTs()
 
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading)
+        return (
+            <>
+                <FiLoader className="animate-spin text-2xl" />
+                <p>Loading...</p>
+            </>
+        )
     if (error) return <p>Error: {error.message}</p>
 
     return (
