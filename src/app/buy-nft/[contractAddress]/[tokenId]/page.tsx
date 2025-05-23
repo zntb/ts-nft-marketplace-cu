@@ -172,6 +172,7 @@ export default function BuyNftPage() {
                                 Your address has been blocked due to compliance restrictions.
                             </p>
                             <button
+                                type="submit"
                                 onClick={() => router.push("/")}
                                 className="mt-4 py-2 px-4 bg-blue-600 text-white rounded-md"
                             >

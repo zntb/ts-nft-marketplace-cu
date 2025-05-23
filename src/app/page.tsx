@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import { useAccount } from "wagmi"
 import RecentlyListedNFTs from "@/components/RecentlyListed"
 
@@ -12,8 +11,6 @@ console.log("App url: ", appUrl) // Log the app URL for debugging;
 export default function Home() {
     const { isConnected, address } = useAccount() // Get connection status and address
     const [isCompliant, setIsCompliant] = useState(true) // Default to true, adjust if needed
-
-    const router = useRouter() // Router for navigation
 
     // Define the async function to perform the check
     async function checkCompliance() {
@@ -73,12 +70,6 @@ export default function Home() {
                     <p className="text-red-600 font-medium">
                         Your address has been blocked due to compliance restrictions.
                     </p>
-                    <button
-                        onClick={() => router.push("/")}
-                        className="mt-4 py-2 px-4 bg-blue-600 text-white rounded-md"
-                    >
-                        Back to Home
-                    </button>
                 </div>
             )}
         </main>
