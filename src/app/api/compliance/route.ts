@@ -1,4 +1,3 @@
-// app/api/compliance/route.ts
 import { v4 as uuidv4 } from "uuid"
 
 export async function POST(request: Request) {

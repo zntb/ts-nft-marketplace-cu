@@ -1,4 +1,3 @@
-// app/buy-nft/[contractAddress]/[tokenId]/page.tsx
 "use client"
 
 import { useState, useEffect } from "react"
@@ -13,6 +12,8 @@ import {
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { chainsToContracts, erc20Abi, marketplaceAbi } from "@/constants"
 import NFTBox from "@/components/NFTBox"
+
+const appUrl = process.env.NEXT_PUBLIC_APP_URL
 
 export default function BuyNftPage() {
     const router = useRouter()
@@ -115,7 +116,7 @@ export default function BuyNftPage() {
         setIsCheckingCompliance(true)
 
         try {
-            const response = await fetch("/api/compliance", {
+            const response = await fetch(`${appUrl}/api/compliance`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ address }),
