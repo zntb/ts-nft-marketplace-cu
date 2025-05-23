@@ -11,11 +11,17 @@ import {
 } from "wagmi"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { chainsToContracts, erc20Abi, marketplaceAbi } from "@/constants"
+import { FiLoader } from "react-icons/fi"
 import NFTBox from "@/components/NFTBox"
-
-const appUrl = process.env.NEXT_PUBLIC_APP_URL
+import useComplianceCheck from "@/hooks/useComplianceCheck"
 
 export default function BuyNftPage() {
+    const { isCompliant, isLoading, error } = useComplianceCheck()
+
+    if (error) {
+        return <div>Error: {error}</div>
+    }
+
     const router = useRouter()
     const { contractAddress, tokenId } = useParams() as {
         contractAddress: string
@@ -23,8 +29,6 @@ export default function BuyNftPage() {
     }
     const { address } = useAccount()
     const chainId = useChainId()
-    const [isCompliant, setIsCompliant] = useState<boolean | null>(null)
-    const [isCheckingCompliance, setIsCheckingCompliance] = useState(false)
 
     const marketplaceAddress =
         (chainsToContracts[chainId]?.nftMarketplace as `0x${string}`) || "0x"
@@ -110,34 +114,6 @@ export default function BuyNftPage() {
         }
     }
 
-    const checkCompliance = async () => {
-        if (!address) return
-
-        setIsCheckingCompliance(true)
-
-        try {
-            const response = await fetch(`${appUrl}/api/compliance`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ address }),
-            })
-
-            const result = await response.json()
-            setIsCompliant(result.success && result.isApproved)
-        } catch (error) {
-            console.error("Compliance check error:", error)
-            setIsCompliant(false)
-        } finally {
-            setIsCheckingCompliance(false)
-        }
-    }
-
-    useEffect(() => {
-        if (address) {
-            checkCompliance()
-        }
-    }, [address])
-
     // Redirect to home if purchase is successful
     useEffect(() => {
         if (step === 3 && isPurchaseSuccess) {
@@ -162,8 +138,9 @@ export default function BuyNftPage() {
                     <h1 className="text-3xl font-bold mb-6 text-gray-700">Buy NFT</h1>
 
                     {/* Connection Status */}
-                    {isCheckingCompliance ? (
+                    {isLoading ? (
                         <div className="p-8 bg-white rounded-xl shadow-sm border border-zinc-200 text-center">
+                            <FiLoader className="animate-spin text-2xl" />
                             <p className="text-zinc-600">Checking compliance...</p>
                         </div>
                     ) : isCompliant === false ? (
