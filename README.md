@@ -1,25 +1,25 @@
-# NFT Marketplace 
+# NFT Marketplace
 
 The final project for the Cyfrin Web3 Full Stack crash course, where we introduce:
 
 1. Indexing (rindexer)
 2. Fleek CLI
-4. Compliance Engine
-5. USDC payment
-6. Gashawk
+3. Compliance Engine
+4. USDC payment
+5. Gashawk
 
 A full-stack NFT marketplace with listing, buying, and compliance features built with Next.js, TypeScript, and Wagmi.
 
 # STARTING CODEBASE!
 
 We will need to implement:
+
 - Update the home page
-  - Add all recently listed NFTs
-  - Indexer
+    - Add all recently listed NFTs
+    - Indexer
 - Compliance Engine
 
 If you wish to see what the final product looks like, head over to the `main` branch!
-
 
 # Table of Contents
 
@@ -27,13 +27,13 @@ If you wish to see what the final product looks like, head over to the `main` br
 - [STARTING CODEBASE!](#starting-codebase)
 - [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
-  - [Requirements](#requirements)
-    - [Environment Variables](#environment-variables)
-  - [Setup](#setup)
-    - [Add Anvil to your metamask](#add-anvil-to-your-metamask)
-    - [Add Anvil accounts to your Metamask](#add-anvil-accounts-to-your-metamask)
-    - [Docker .env](#docker-env)
-  - [Running the Application](#running-the-application)
+    - [Requirements](#requirements)
+        - [Environment Variables](#environment-variables)
+    - [Setup](#setup)
+        - [Add Anvil to your metamask](#add-anvil-to-your-metamask)
+        - [Add Anvil accounts to your Metamask](#add-anvil-accounts-to-your-metamask)
+        - [Docker .env](#docker-env)
+    - [Running the Application](#running-the-application)
 - [Database Reset](#database-reset)
 - [Features](#features)
 - [Addresses for testing](#addresses-for-testing)
@@ -59,7 +59,7 @@ If you wish to see what the final product looks like, head over to the `main` br
 
 Create a `.env.local` file with the following environment variables:
 
-```
+```env
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
 GRAPHQL_API_URL=http://localhost:3001/graphql
 ENABLE_COMPLIANCE_CHECK=false
@@ -82,6 +82,7 @@ pnpm install
 ### Add Anvil to your metamask
 
 Add the following network to your metamask:
+
 - Name: Anvil
 - RPC URL: http://127.0.0.1:8545
 - Chain ID: 31337
@@ -89,7 +90,7 @@ Add the following network to your metamask:
 
 ### Add Anvil accounts to your Metamask
 
-```
+```sh
 Private Keys
 ==================
 
@@ -97,13 +98,13 @@ Private Keys
 (9) 0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6 # This one
 ```
 
-Add private keys `0` and `9` to your Metamask, these will have NFTs already loaded when you run `pnpm anvil` later. 
+Add private keys `0` and `9` to your Metamask, these will have NFTs already loaded when you run `pnpm anvil` later.
 
 ### Docker .env
 
 For working with a postgres DB, add a `.env` file to `./marketplaceIndexer/.env`:
 
-```
+```env
 DATABASE_URL=postgresql://postgres:rindexer@localhost:5440/postgres
 POSTGRES_PASSWORD=rindexer
 ```
@@ -126,13 +127,14 @@ pnpm run dev
 
 In your Metamask now, select account 0 which you imported from the step above, and add the following NFT with tokenID 0:
 
-```
+```sh
 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
 ```
 
 You should see the NFT in your metamask. Note: This will only work while `pnpm anvil` is running!
 
 # Database Reset
+
 If you need to reset the indexer database:
 
 ```bash
